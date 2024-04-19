@@ -1,14 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ConfigProvider } from "antd";
-import trTR from "antd/locale/tr_TR";
 import App from "./App.tsx";
-import "./index.css";
+import { ThemeProvider } from "@emotion/react";
+import { CssBaseline } from "@mui/material";
+import Theme from "./common/Theme.tsx";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ConfigProvider locale={trTR}>
+    <ThemeProvider theme={Theme}>
+      <CssBaseline />
       <App />
-    </ConfigProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );

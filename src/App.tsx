@@ -1,19 +1,25 @@
-import { useState } from "react";
-import { Button, Space } from "antd";
-import { SpotifyOutlined, YoutubeOutlined } from "@ant-design/icons";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "./common/Layout";
+import Home from "./common/Home";
+import Page404 from "./common/Page404";
+import SpotifyPlaylists from "./spotfiy/SpotifyPlaylists";
+import SpotifyPlaylistDetail from "./spotfiy/SpotifyPlaylistDetail";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+export default function App() {
   return (
-    <div style={{ padding: "0 24px" }}>
-      <Space>
-        <SpotifyOutlined style={{ fontSize: "64px" }} />
-        <YoutubeOutlined style={{ fontSize: "82px" }} />
-        <Button type="primary">Primary Button</Button>
-      </Space>
-    </div>
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<Page404 />} />
+          <Route
+            path="playlists"
+            element={<SpotifyPlaylists spotifyToken="" />}
+          >
+            <Route path=":id" element={<SpotifyPlaylistDetail />} />
+          </Route>
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   );
 }
-
-export default App;
