@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Link } from "@mui/material";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import axios from "axios";
-import Urls from "../Urls";
+import { Button, ButtonGroup, Grid, Link } from "@mui/material";
+import Urls from "../enums/Urls";
+import Constants from "../enums/Constants";
 import Item from "../common/Item";
 import SpotifyUserInfo from "./SpotifyUserInfo";
-import SpotifyPlaylists from "./SpotifyPlaylists";
 
 export default function SpotifyContainer() {
   const navigate = useNavigate();
 
   const [currentItem, setCurrentItem] = useState<number>(-1);
   const [spotifyToken, setSpotifyToken] = useState<string>("");
-  const [spotifyMe, setSpotifyMe] = useState<SpotifyMe>({});
 
   const handleItemClick = (index: number, link: string) => {
     setCurrentItem(index);
@@ -28,15 +24,8 @@ export default function SpotifyContainer() {
       const token = query.get("access_token");
 
       if (token) {
-        const response = await axios.get(Urls.SPOTIFY_API_URI + "me", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
-
-        localStorage.setItem("spotifyToken", token ?? "");
+        localStorage.setItem(Constants.SPOTIFY_TOKEN_KEY, token ?? "");
         setSpotifyToken(token);
-        setSpotifyMe(response.data);
       }
     })();
   }, []);
@@ -52,7 +41,7 @@ export default function SpotifyContainer() {
   ) : (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <SpotifyUserInfo spotifyMe={spotifyMe} />
+        <SpotifyUserInfo />
       </Grid>
       <Grid item xs={12}>
         <ButtonGroup variant="outlined" aria-label="Basic button group">
@@ -69,7 +58,6 @@ export default function SpotifyContainer() {
             Saved Tracks
           </Button>
         </ButtonGroup>
-        {/* <SpotifyPlaylists spotifyToken={spotifyToken} /> */}
       </Grid>
     </Grid>
   );

@@ -1,23 +1,16 @@
-interface SpotifyMe {
-  country: string;
-  display_name: string;
-  email: string;
-  explicit_content: {
-    filter_enabled: boolean;
-    filter_locked: boolean;
-  };
-  external_urls: { spotify: string };
-  followers: { href: string; total: number };
-  href: string;
-  id: string;
-  images: Image[];
-  product: string;
-  type: string;
-  uri: string;
+export default class SpotifyMe {
+  display_name: string = "";
+  followers: Followers = new Followers();
+  images: Image[] = [];
 }
 
-interface Image {
-  url: string;
-  height: number;
-  width: number;
+export class Image {
+  url: string = "";
+  height: number = 0;
+  width: number = 0;
+}
+
+export class Followers {
+  href: string = "";
+  total: number = 0;
 }

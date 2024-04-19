@@ -12,7 +12,7 @@ export default function NavBar() {
           component="div"
           sx={{ flexGrow: 1 }}
         >
-          Metarial ui example
+          SpotTube
         </Typography>
       </Toolbar>
     </AppBar>

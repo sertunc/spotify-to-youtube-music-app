@@ -1,47 +1,59 @@
 import { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Link as MuiLink,
+} from "@mui/material";
 
 import axios from "axios";
-import Urls from "../Urls";
+import Urls from "../enums/Urls";
+import Constants from "../enums/Constants";
+import CommonStyles from "../common/CommonStyles";
 
-export interface IProps {
-  spotifyToken: string;
-}
-
-export default function SpotifyPlaylists(props: IProps) {
+export default function SpotifyPlaylists() {
   const [data, setData] = useState<PlaylistItem[]>([]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await axios.get(Urls.SPOTIFY_API_URI + "me/playlists", {
-  //       headers: {
-  //         Authorization: "Bearer " + props.spotifyToken,
-  //       },
-  //     });
-  //     console.log(response.data);
-  //     setData(response.data.items);
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get(Urls.SPOTIFY_API_URI + "me/playlists", {
+        headers: {
+          Authorization:
+            "Bearer " + localStorage.getItem(Constants.SPOTIFY_TOKEN_KEY),
+        },
+      });
+
+      setData(response.data.items);
+    })();
+  }, []);
 
   return (
     <>
-      <Outlet />
       {data.map((item) => (
-        <Card sx={{ display: "flex", marginBottom: 1 }} key={item.id}>
-          <Link to={`playlists/${item.id}`}>
+        <Card
+          style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
+          key={item.id}
+        >
+          <Link style={CommonStyles.link} to={`/playlist/${item.id}`}>
             <CardMedia
-              sx={{ width: 60, height: 60 }}
+              sx={{ width: 60, height: 60, marginLeft: 2 }}
               image={item.images[0].url}
             />
           </Link>
           <CardContent>
-            <Link to={`playlists/${item.id}`}>
+            <Link style={CommonStyles.link} to={`/playlist/${item.id}`}>
               <Typography component="div" variant="h6">
                 {item.name}
               </Typography>
             </Link>
-            {/* <Link href={item.external_urls.spotify}>Open in Spotify</Link> */}
+            <MuiLink
+              style={CommonStyles.link}
+              href={item.external_urls.spotify}
+            >
+              Open in Spotify
+            </MuiLink>
           </CardContent>
         </Card>
       ))}
