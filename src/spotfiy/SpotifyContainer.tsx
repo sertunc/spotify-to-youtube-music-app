@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "../contexts/SnackbarContext";
 import { Button, ButtonGroup, Grid, Link } from "@mui/material";
 import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
@@ -8,6 +9,8 @@ import SpotifyUserInfo from "./SpotifyUserInfo";
 
 export default function SpotifyContainer() {
   const navigate = useNavigate();
+
+  const { openSnackbar } = useSnackbar();
 
   const [currentItem, setCurrentItem] = useState<number>(-1);
   const [spotifyToken, setSpotifyToken] = useState<string>("");
@@ -26,6 +29,7 @@ export default function SpotifyContainer() {
       if (token) {
         localStorage.setItem(Constants.SPOTIFY_TOKEN_KEY, token ?? "");
         setSpotifyToken(token);
+        openSnackbar("Login successfully", "success");
       }
     })();
   }, []);

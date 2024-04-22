@@ -12,7 +12,8 @@ export default function NavBar() {
           component="div"
           sx={{ flexGrow: 1 }}
         >
-          SpotTube
+          {/* SpotTube */}
+          React-Typescript Example
         </Typography>
       </Toolbar>
     </AppBar>
