@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
+import { useSnackbar } from "../contexts/SnackbarContext";
 import { Link } from "react-router-dom";
 import {
   Card,
   CardContent,
   CardMedia,
+  IconButton,
   Typography,
   Link as MuiLink,
+  CardActions,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import axios from "axios";
 import Urls from "../enums/Urls";
@@ -14,18 +18,27 @@ import Constants from "../enums/Constants";
 import CommonStyles from "../common/CommonStyles";
 
 export default function SpotifyPlaylists() {
+  const { openSnackbar } = useSnackbar();
+
   const [data, setData] = useState<PlaylistItem[]>([]);
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get(Urls.SPOTIFY_API_URI + "me/playlists", {
-        headers: {
-          Authorization:
-            "Bearer " + localStorage.getItem(Constants.SPOTIFY_TOKEN_KEY),
-        },
-      });
+      const token = localStorage.getItem(Constants.SPOTIFY_TOKEN_KEY);
+      if (token) {
+        const response = await axios.get(
+          Urls.SPOTIFY_API_URI + "me/playlists",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
-      setData(response.data.items);
+        setData(response.data.items);
+      } else {
+        openSnackbar("Please login with spotify", "error");
+      }
     })();
   }, []);
 
@@ -33,6 +46,7 @@ export default function SpotifyPlaylists() {
     <>
       {data.map((item) => (
         <Card
+          variant="outlined"
           style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
           key={item.id}
         >
@@ -45,7 +59,7 @@ export default function SpotifyPlaylists() {
           <CardContent>
             <Link style={CommonStyles.link} to={`/playlist/${item.id}`}>
               <Typography component="div" variant="h6">
-                {item.name}
+                {item.name} ({item.tracks.total})
               </Typography>
             </Link>
             <MuiLink
@@ -55,6 +69,11 @@ export default function SpotifyPlaylists() {
               Open in Spotify
             </MuiLink>
           </CardContent>
+          <CardActions style={{ marginLeft: "auto" }}>
+            <IconButton aria-label="delete">
+              <DeleteIcon />
+            </IconButton>
+          </CardActions>
         </Card>
       ))}
     </>

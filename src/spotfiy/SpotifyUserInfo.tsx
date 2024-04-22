@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSnackbar } from "../contexts/SnackbarContext";
 import axios from "axios";
 import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
@@ -6,6 +7,8 @@ import SpotifyMe from "./models/SpotifyMe";
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 
 export default function SpotifyUserInfo() {
+  const { openSnackbar } = useSnackbar();
+
   const [spotifyMe, setSpotifyMe] = useState<SpotifyMe>(new SpotifyMe());
 
   useEffect(() => {
@@ -20,7 +23,7 @@ export default function SpotifyUserInfo() {
 
         setSpotifyMe(response.data);
       } else {
-        alert("Please login with spotify");
+        openSnackbar("Please login with spotify", "error");
       }
     })();
   }, []);

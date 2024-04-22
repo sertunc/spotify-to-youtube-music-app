@@ -4,6 +4,7 @@ interface PlaylistItem {
   uri: string;
   images: Image[];
   external_urls: { spotify: string };
+  tracks: { total: number };
 }
 
 interface Image {
