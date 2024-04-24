@@ -47,6 +47,7 @@ export default function SpotifyUserInfo() {
               component="div"
             >
               {`${spotifyMe.followers.total} followers`}
+              {` - ${spotifyMe.product}`}
             </Typography>
           </CardContent>
         </Box>

@@ -6,6 +6,7 @@ import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
 import Item from "../common/Item";
 import SpotifyUserInfo from "./SpotifyUserInfo";
+import { ItemType } from "./models/ItemType";
 import { getCodeChallenge, getCodeVerifier, getToken } from "./SpotifyService";
 
 export default function SpotifyContainer() {
@@ -13,11 +14,13 @@ export default function SpotifyContainer() {
 
   const { openSnackbar } = useSnackbar();
 
-  const [currentItem, setCurrentItem] = useState<number>(-1);
-  const [spotifyToken, setSpotifyToken] = useState<string>("");
+  const [currentItem, setCurrentItem] = useState<ItemType>(ItemType.NONE);
+  const [spotifyToken, setSpotifyToken] = useState<string>(() => {
+    return localStorage.getItem(Constants.SPOTIFY_TOKEN_KEY) || "";
+  });
 
-  const handleItemClick = (index: number, link: string) => {
-    setCurrentItem(index);
+  const handleItemClick = (itemType: ItemType, link: string) => {
+    setCurrentItem(itemType);
     navigate(link);
   };
 
@@ -41,6 +44,7 @@ export default function SpotifyContainer() {
           clientId,
           redirectUri
         );
+
         if (result.access_token) {
           localStorage.setItem(
             Constants.SPOTIFY_TOKEN_KEY,
@@ -87,16 +91,24 @@ export default function SpotifyContainer() {
       <Grid item xs={12}>
         <ButtonGroup variant="outlined" aria-label="Basic button group">
           <Button
-            variant={currentItem === 0 ? "contained" : "outlined"}
-            onClick={() => handleItemClick(0, "playlists")}
+            variant={
+              currentItem === ItemType.PLAYLIST ? "contained" : "outlined"
+            }
+            onClick={() => handleItemClick(ItemType.PLAYLIST, "playlists")}
           >
             Playlists
           </Button>
           <Button
-            variant={currentItem === 1 ? "contained" : "outlined"}
-            onClick={() => handleItemClick(1, "tracks")}
+            variant={currentItem === ItemType.TRACK ? "contained" : "outlined"}
+            onClick={() => handleItemClick(ItemType.TRACK, "tracks")}
           >
             Saved Tracks
+          </Button>
+          <Button
+            variant={currentItem === ItemType.ALBUM ? "contained" : "outlined"}
+            onClick={() => handleItemClick(ItemType.ALBUM, "albums")}
+          >
+            Saved Albums
           </Button>
         </ButtonGroup>
       </Grid>

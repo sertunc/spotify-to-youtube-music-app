@@ -1,5 +1,6 @@
 export default class SpotifyMe {
   display_name: string = "";
+  product: string = "";
   followers: Followers = new Followers();
   images: Image[] = [];
 }
