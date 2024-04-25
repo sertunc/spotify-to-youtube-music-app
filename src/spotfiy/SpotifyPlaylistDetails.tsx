@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
-import { PlaylistItem } from "./models/SpotifyPlaylist";
 import { useParams } from "react-router-dom";
+import LocalStorageProvider from "../common/LocalStorageProvider";
 
 export default function SpotifyPlaylistDetails() {
   const { id } = useParams();
@@ -17,7 +17,7 @@ export default function SpotifyPlaylistDetails() {
         {
           headers: {
             Authorization:
-              "Bearer " + localStorage.getItem(Constants.SPOTIFY_TOKEN_KEY),
+              "Bearer " + LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY),
           },
         }
       );

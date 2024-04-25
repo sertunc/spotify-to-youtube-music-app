@@ -1,30 +1,20 @@
 import { useEffect, useState } from "react";
 import { useSnackbar } from "../contexts/SnackbarContext";
-import { Link } from "react-router-dom";
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  IconButton,
-  Typography,
-  Link as MuiLink,
-  CardActions,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 import axios from "axios";
 import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
-import CommonStyles from "../common/CommonStyles";
+import TrackListItem from "./components/TrackListItem";
+import LocalStorageProvider from "../common/LocalStorageProvider";
 
 export default function SpotifyTracks() {
   const { openSnackbar } = useSnackbar();
 
-  const [data, setData] = useState<PlaylistItem[]>([]);
+  const [data, setData] = useState<TrackItem[]>([]);
 
   useEffect(() => {
     (async () => {
-      const token = localStorage.getItem(Constants.SPOTIFY_TOKEN_KEY);
+      const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
       if (token) {
         const response = await axios.get(Urls.SPOTIFY_API_URI + "me/tracks", {
           headers: {
@@ -32,47 +22,24 @@ export default function SpotifyTracks() {
           },
         });
         console.log(response.data);
-        //setData(response.data.items);
+
+        const data: TrackItem[] = response.data.items.map((item: any) => ({
+          id: item.track.id,
+          name: item.track.name,
+          albumName: item.track.album.name,
+          artistName: item.track.artists[0].name,
+          imageUrl: item.track.album.images[0].url,
+          url: item.track.external_urls.spotify,
+        }));
+
+        setData(data);
       } else {
         openSnackbar("Please login with spotify", "error");
       }
     })();
   }, []);
 
-  return (
-    <>
-      {data.map((item) => (
-        <Card
-          variant="outlined"
-          style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
-          key={item.id}
-        >
-          <Link style={CommonStyles.link} to={`/playlist/${item.id}`}>
-            <CardMedia
-              sx={{ width: 60, height: 60, marginLeft: 2 }}
-              image={item.images[0].url}
-            />
-          </Link>
-          <CardContent>
-            <Link style={CommonStyles.link} to={`/playlist/${item.id}`}>
-              <Typography component="div" variant="h6">
-                {item.name} ({item.tracks.total})
-              </Typography>
-            </Link>
-            <MuiLink
-              style={CommonStyles.link}
-              href={item.external_urls.spotify}
-            >
-              Open in Spotify
-            </MuiLink>
-          </CardContent>
-          <CardActions style={{ marginLeft: "auto" }}>
-            <IconButton aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      ))}
-    </>
-  );
+  return data.map((item) => (
+    <TrackListItem key={item.id} pageLink="track" trackItem={item} />
+  ));
 }

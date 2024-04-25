@@ -1,4 +1,4 @@
-export enum ItemType {
+export enum LibraryItemType {
   NONE = "none",
   PLAYLIST = "playlist",
   TRACK = "track",

@@ -6,20 +6,23 @@ import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
 import Item from "../common/Item";
 import SpotifyUserInfo from "./SpotifyUserInfo";
-import { ItemType } from "./models/ItemType";
+import { LibraryItemType } from "./models/LibraryItemType";
 import { getCodeChallenge, getCodeVerifier, getToken } from "./SpotifyService";
+import LocalStorageProvider from "../common/LocalStorageProvider";
 
 export default function SpotifyContainer() {
   const navigate = useNavigate();
 
   const { openSnackbar } = useSnackbar();
 
-  const [currentItem, setCurrentItem] = useState<ItemType>(ItemType.NONE);
+  const [currentItem, setCurrentItem] = useState<LibraryItemType>(
+    LibraryItemType.NONE
+  );
   const [spotifyToken, setSpotifyToken] = useState<string>(() => {
-    return localStorage.getItem(Constants.SPOTIFY_TOKEN_KEY) || "";
+    return LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY) || "";
   });
 
-  const handleItemClick = (itemType: ItemType, link: string) => {
+  const handleItemClick = (itemType: LibraryItemType, link: string) => {
     setCurrentItem(itemType);
     navigate(link);
   };
@@ -31,7 +34,7 @@ export default function SpotifyContainer() {
 
       if (code) {
         const codeVerifier =
-          localStorage.getItem(Constants.SPOTIFY_CODE_VERIFIER_KEY) || "";
+          LocalStorageProvider.get(Constants.SPOTIFY_CODE_VERIFIER_KEY) || "";
 
         const tokenEndpoint = Urls.SPOTIFY_TOKEN_ENDPOINT;
         const clientId = Constants.SPOTIFY_CLIENT_ID;
@@ -46,7 +49,7 @@ export default function SpotifyContainer() {
         );
 
         if (result.access_token) {
-          localStorage.setItem(
+          LocalStorageProvider.set(
             Constants.SPOTIFY_TOKEN_KEY,
             result.access_token ?? ""
           );
@@ -63,7 +66,7 @@ export default function SpotifyContainer() {
     const codeVerifier = getCodeVerifier();
     const codeChallenge = await getCodeChallenge(codeVerifier);
 
-    localStorage.setItem(Constants.SPOTIFY_CODE_VERIFIER_KEY, codeVerifier);
+    LocalStorageProvider.set(Constants.SPOTIFY_CODE_VERIFIER_KEY, codeVerifier);
 
     const authUrl = new URL(Urls.SPOTIFY_AUTHORIZATION_ENDPOINT);
     const params = {
@@ -92,21 +95,29 @@ export default function SpotifyContainer() {
         <ButtonGroup variant="outlined" aria-label="Basic button group">
           <Button
             variant={
-              currentItem === ItemType.PLAYLIST ? "contained" : "outlined"
+              currentItem === LibraryItemType.PLAYLIST
+                ? "contained"
+                : "outlined"
             }
-            onClick={() => handleItemClick(ItemType.PLAYLIST, "playlists")}
+            onClick={() =>
+              handleItemClick(LibraryItemType.PLAYLIST, "playlists")
+            }
           >
             Playlists
           </Button>
           <Button
-            variant={currentItem === ItemType.TRACK ? "contained" : "outlined"}
-            onClick={() => handleItemClick(ItemType.TRACK, "tracks")}
+            variant={
+              currentItem === LibraryItemType.TRACK ? "contained" : "outlined"
+            }
+            onClick={() => handleItemClick(LibraryItemType.TRACK, "tracks")}
           >
             Saved Tracks
           </Button>
           <Button
-            variant={currentItem === ItemType.ALBUM ? "contained" : "outlined"}
-            onClick={() => handleItemClick(ItemType.ALBUM, "albums")}
+            variant={
+              currentItem === LibraryItemType.ALBUM ? "contained" : "outlined"
+            }
+            onClick={() => handleItemClick(LibraryItemType.ALBUM, "albums")}
           >
             Saved Albums
           </Button>

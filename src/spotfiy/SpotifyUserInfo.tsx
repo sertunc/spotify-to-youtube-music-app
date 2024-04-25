@@ -5,6 +5,7 @@ import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
 import SpotifyMe from "./models/SpotifyMe";
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import LocalStorageProvider from "../common/LocalStorageProvider";
 
 export default function SpotifyUserInfo() {
   const { openSnackbar } = useSnackbar();
@@ -13,15 +14,22 @@ export default function SpotifyUserInfo() {
 
   useEffect(() => {
     (async () => {
-      const token = localStorage.getItem(Constants.SPOTIFY_TOKEN_KEY);
+      const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
       if (token) {
-        const response = await axios.get(Urls.SPOTIFY_API_URI + "me", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
+        try {
+          const response = await axios.get(Urls.SPOTIFY_API_URI + "me", {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          });
 
-        setSpotifyMe(response.data);
+          setSpotifyMe(response.data);
+        } catch (error) {
+          if (error.response.status === 401) {
+            LocalStorageProvider.clear();
+            openSnackbar("Please login with spotify", "error");
+          }
+        }
       } else {
         openSnackbar("Please login with spotify", "error");
       }
