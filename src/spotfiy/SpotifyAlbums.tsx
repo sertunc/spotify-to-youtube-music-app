@@ -6,8 +6,7 @@ import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
 import LibraryListItem from "./components/LibraryListItem";
 import LocalStorageProvider from "../common/LocalStorageProvider";
-import CommonStyles from "../common/CommonStyles";
-import { Divider, Pagination, Stack } from "@mui/material";
+import Pager from "../common/Pager";
 
 export default function SpotifyAlbums() {
   const { openSnackbar } = useSnackbar();
@@ -52,7 +51,7 @@ export default function SpotifyAlbums() {
     })();
   }, [model.offset]);
 
-  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handleChange = (event: any, page: number) => {
     setModel((prevModel) => ({
       ...prevModel,
       offset: (page - 1) * prevModel.limit,
@@ -64,19 +63,12 @@ export default function SpotifyAlbums() {
       {model.data.map((item) => (
         <LibraryListItem key={item.id} pageLink="album" libraryItem={item} />
       ))}
-      <div style={CommonStyles.paginationContainer}>
-        <Divider />
-        <Stack spacing={2}>
-          <Pagination
-            color="secondary"
-            showFirstButton
-            showLastButton
-            count={Math.ceil(model.total / model.limit)}
-            page={model.offset / model.limit + 1}
-            onChange={handleChange}
-          />
-        </Stack>
-      </div>
+      <Pager
+        total={model.total}
+        offset={model.offset}
+        limit={model.limit}
+        handleChange={handleChange}
+      />
     </>
   );
 }
