@@ -14,6 +14,7 @@ import CommonStyles from "../../common/CommonStyles";
 interface IProps {
   trackItem: TrackItem;
   pageLink?: string;
+  handleDelete: (id: string) => void;
 }
 
 export default function TrackListItem(props: IProps) {
@@ -47,7 +48,7 @@ export default function TrackListItem(props: IProps) {
         </MuiLink>
       </CardContent>
       <CardActions style={{ marginLeft: "auto" }}>
-        <IconButton aria-label="delete">
+        <IconButton onClick={() => props.handleDelete(props.trackItem.id)}>
           <DeleteIcon />
         </IconButton>
       </CardActions>

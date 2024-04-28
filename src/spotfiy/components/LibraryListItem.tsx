@@ -14,6 +14,8 @@ import CommonStyles from "../../common/CommonStyles";
 interface IProps {
   libraryItem: LibraryItem;
   pageLink?: string;
+  showDelete: boolean;
+  handleDelete?: (id: string) => void;
 }
 
 export default function LibraryListItem(props: IProps) {
@@ -45,11 +47,19 @@ export default function LibraryListItem(props: IProps) {
           Open in Spotify
         </MuiLink>
       </CardContent>
-      <CardActions style={{ marginLeft: "auto" }}>
-        <IconButton aria-label="delete">
-          <DeleteIcon />
-        </IconButton>
-      </CardActions>
+      {props.showDelete && (
+        <CardActions style={{ marginLeft: "auto" }}>
+          {props.handleDelete && (
+            <IconButton
+              onClick={() =>
+                props.handleDelete && props.handleDelete(props.libraryItem.id)
+              }
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
+        </CardActions>
+      )}
     </Card>
   );
 }

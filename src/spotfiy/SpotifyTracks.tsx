@@ -52,6 +52,23 @@ export default function SpotifyTracks() {
     })();
   }, [model.offset]);
 
+  const handleDelete = async (id: string) => {
+    //TODO: confirm modal
+    const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
+    if (token) {
+      await axios.delete(`${Urls.SPOTIFY_API_URI}me/tracks`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        data: {
+          ids: [id],
+        },
+      });
+    } else {
+      openSnackbar("Please login with spotify", "error");
+    }
+  };
+
   const handleChange = (event: any, page: number) => {
     setModel((prevModel) => ({
       ...prevModel,
@@ -62,7 +79,12 @@ export default function SpotifyTracks() {
   return (
     <>
       {model.data.map((item) => (
-        <TrackListItem key={item.id} pageLink="track" trackItem={item} />
+        <TrackListItem
+          key={item.id}
+          pageLink="track"
+          trackItem={item}
+          handleDelete={handleDelete}
+        />
       ))}
       <Pager
         total={model.total}

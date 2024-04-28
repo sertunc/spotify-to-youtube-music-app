@@ -6,7 +6,6 @@ import Page404 from "./common/Page404";
 import SpotifyPlaylists from "./spotfiy/SpotifyPlaylists";
 import SpotifyPlaylistDetail from "./spotfiy/SpotifyPlaylistDetails";
 import SpotifyTracks from "./spotfiy/SpotifyTracks";
-import SpotifyTrackDetails from "./spotfiy/SpotifyTrackDetails";
 import SpotifyAlbums from "./spotfiy/SpotifyAlbums";
 import SpotifyAlbumDetails from "./spotfiy/SpotifyAlbumDetails";
 
@@ -21,7 +20,6 @@ export default function App() {
             <Route path="playlists" element={<SpotifyPlaylists />} />
             <Route path="playlist/:id" element={<SpotifyPlaylistDetail />} />
             <Route path="tracks" element={<SpotifyTracks />} />
-            <Route path="track/:id" element={<SpotifyTrackDetails />} />
             <Route path="albums" element={<SpotifyAlbums />} />
             <Route path="album/:id" element={<SpotifyAlbumDetails />} />
           </Routes>

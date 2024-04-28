@@ -51,6 +51,23 @@ export default function SpotifyAlbums() {
     })();
   }, [model.offset]);
 
+  const handleDelete = async (id: string) => {
+    //TODO: confirm modal
+    const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
+    if (token) {
+      await axios.delete(`${Urls.SPOTIFY_API_URI}me/albums`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        data: {
+          ids: [id],
+        },
+      });
+    } else {
+      openSnackbar("Please login with spotify", "error");
+    }
+  };
+
   const handleChange = (event: any, page: number) => {
     setModel((prevModel) => ({
       ...prevModel,
@@ -61,7 +78,13 @@ export default function SpotifyAlbums() {
   return (
     <>
       {model.data.map((item) => (
-        <LibraryListItem key={item.id} pageLink="album" libraryItem={item} />
+        <LibraryListItem
+          key={item.id}
+          pageLink="album"
+          libraryItem={item}
+          showDelete={true}
+          handleDelete={handleDelete}
+        />
       ))}
       <Pager
         total={model.total}

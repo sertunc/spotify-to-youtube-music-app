@@ -61,7 +61,12 @@ export default function SpotifyPlaylists() {
   return (
     <>
       {model.data.map((item) => (
-        <LibraryListItem key={item.id} pageLink="playlist" libraryItem={item} />
+        <LibraryListItem
+          key={item.id}
+          pageLink="playlist"
+          libraryItem={item}
+          showDelete={false}
+        />
       ))}
       <Pager
         total={model.total}

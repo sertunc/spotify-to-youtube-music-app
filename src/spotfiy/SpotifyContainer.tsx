@@ -92,7 +92,7 @@ export default function SpotifyContainer() {
         <SpotifyUserInfo />
       </Grid>
       <Grid item xs={12}>
-        <ButtonGroup variant="outlined" aria-label="Basic button group">
+        <ButtonGroup variant="outlined">
           <Button
             variant={
               currentItem === LibraryItemType.PLAYLIST
