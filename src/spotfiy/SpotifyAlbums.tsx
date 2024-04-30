@@ -6,10 +6,16 @@ import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
 import LibraryListItem from "./components/LibraryListItem";
 import LocalStorageProvider from "../common/LocalStorageProvider";
+import CustomYesNoDialog from "../common/CustomYesNoDialog";
 import Pager from "../common/Pager";
 
 export default function SpotifyAlbums() {
   const { openSnackbar } = useSnackbar();
+
+  const [showModal, setShowModal] = useState({
+    open: false,
+    id: "",
+  });
 
   const [model, setModel] = useState<LibraryCollection>({
     data: [],
@@ -49,10 +55,16 @@ export default function SpotifyAlbums() {
         openSnackbar("Please login with spotify", "error");
       }
     })();
-  }, [model.offset]);
+  }, [model.offset, showModal.open]);
 
   const handleDelete = async (id: string) => {
-    //TODO: confirm modal
+    setShowModal({
+      open: true,
+      id: id,
+    });
+  };
+
+  const handleDeleteConfirm = async () => {
     const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
     if (token) {
       await axios.delete(`${Urls.SPOTIFY_API_URI}me/albums`, {
@@ -60,9 +72,11 @@ export default function SpotifyAlbums() {
           Authorization: "Bearer " + token,
         },
         data: {
-          ids: [id],
+          ids: [showModal.id],
         },
       });
+
+      setShowModal({ open: false, id: "" });
     } else {
       openSnackbar("Please login with spotify", "error");
     }
@@ -92,6 +106,15 @@ export default function SpotifyAlbums() {
         limit={model.limit}
         handleChange={handleChange}
       />
+      {showModal.open && (
+        <CustomYesNoDialog
+          titleMessage="Warning!"
+          contentMessage="Are you sure you want to delete this album?"
+          open={showModal.open}
+          onClose={() => setShowModal({ open: false, id: "" })}
+          onYesClick={handleDeleteConfirm}
+        />
+      )}
     </>
   );
 }
