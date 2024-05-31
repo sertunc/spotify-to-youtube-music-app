@@ -18,7 +18,7 @@ export default function Layout(props: any) {
         <Grid item xs={6}>
           <YoutubeMusicContainer />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           {getChildren(props)}
         </Grid>
       </Grid>

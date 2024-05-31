@@ -5,4 +5,5 @@ export default class Urls {
     "https://accounts.spotify.com/api/token";
   public static readonly SPOTIFY_API_URI = "https://api.spotify.com/v1/";
   public static readonly SPOTIFY_REDIRECT_URI = "http://localhost:5173";
+  public static readonly YOUTUBE_MUSIC_API_URI = "http://localhost:5192/api/";
 }
