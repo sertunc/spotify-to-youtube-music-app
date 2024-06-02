@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import {
   Card,
   CardActions,
@@ -24,25 +23,25 @@ export default function TrackListItem(props: IProps) {
       style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
       key={props.trackItem.id}
     >
-      <Link
+      <MuiLink
         style={CommonStyles.link}
-        to={`/${props.pageLink}/${props.trackItem.id}`}
+        href={`/${props.pageLink}/${props.trackItem.id}`}
       >
         <CardMedia
           sx={{ width: 60, height: 60, marginLeft: 2 }}
           image={props.trackItem.imageUrl}
         />
-      </Link>
+      </MuiLink>
       <CardContent>
-        <Link
+        <MuiLink
           style={CommonStyles.link}
-          to={`/${props.pageLink}/${props.trackItem.id}`}
+          href={`/${props.pageLink}/${props.trackItem.id}`}
         >
           <Typography component="div" variant="h6">
             {props.trackItem.artistName} - {props.trackItem.albumName} -{" "}
             {props.trackItem.name}
           </Typography>
-        </Link>
+        </MuiLink>
         <MuiLink style={CommonStyles.link} href={props.trackItem.url}>
           Open in Spotify
         </MuiLink>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import { Button, ButtonGroup, Grid } from "@mui/material";
@@ -20,7 +20,17 @@ export default function YoutubeMusicContainer() {
     new YoutubeMusicMe()
   );
 
+  useEffect(() => {
+    (async () => {
+      await handleLogin();
+    })();
+  }, []);
+
   const handleYoutubeMusicLogin = async () => {
+    await handleLogin();
+  };
+
+  const handleLogin = async () => {
     const spotifyCode =
       LocalStorageProvider.get(Constants.SPOTIFY_CODE_VERIFIER_KEY) || "";
 

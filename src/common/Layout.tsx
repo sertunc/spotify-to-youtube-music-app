@@ -1,4 +1,3 @@
-import React from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import NavBar from "./NavBar";
@@ -18,16 +17,7 @@ export default function Layout(props: any) {
         <Grid item xs={6}>
           <YoutubeMusicContainer />
         </Grid>
-        <Grid item xs={6}>
-          {getChildren(props)}
-        </Grid>
       </Grid>
     </Container>
   );
-}
-
-function getChildren(props: any) {
-  return React.Children.map(props.children, (child: any) => {
-    return child;
-  });
 }

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import { Button, ButtonGroup, Grid } from "@mui/material";
 import Urls from "../enums/Urls";
@@ -9,10 +8,11 @@ import SpotifyUserInfo from "./SpotifyUserInfo";
 import { LibraryItemType } from "./models/LibraryItemType";
 import { getCodeChallenge, getCodeVerifier, getToken } from "./SpotifyService";
 import LocalStorageProvider from "../common/LocalStorageProvider";
+import SpotifyPlaylists from "./SpotifyPlaylists";
+import SpotifyTracks from "./SpotifyTracks";
+import SpotifyAlbums from "./SpotifyAlbums";
 
 export default function SpotifyContainer() {
-  const navigate = useNavigate();
-
   const { openSnackbar } = useSnackbar();
 
   const [currentItem, setCurrentItem] = useState<LibraryItemType>(
@@ -24,7 +24,6 @@ export default function SpotifyContainer() {
 
   const handleItemClick = (itemType: LibraryItemType, link: string) => {
     setCurrentItem(itemType);
-    navigate(link);
   };
 
   useEffect(() => {
@@ -122,6 +121,11 @@ export default function SpotifyContainer() {
             Saved Albums
           </Button>
         </ButtonGroup>
+      </Grid>
+      <Grid item xs={12}>
+        {currentItem === LibraryItemType.PLAYLIST && <SpotifyPlaylists />}
+        {currentItem === LibraryItemType.TRACK && <SpotifyTracks />}
+        {currentItem === LibraryItemType.ALBUM && <SpotifyAlbums />}
       </Grid>
     </Grid>
   );
