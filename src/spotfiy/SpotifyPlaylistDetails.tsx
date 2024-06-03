@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
+import { useAppContext } from "../contexts/AppContext";
 import axios from "axios";
 import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
-import { useParams } from "react-router-dom";
 import LocalStorageProvider from "../common/LocalStorageProvider";
 
 export default function SpotifyPlaylistDetails() {
-  const { id } = useParams();
-
-  //const [data, setData] = useState<PlaylistItem[]>([]);
+  const { libraryItemType, spotifyItemId } = useAppContext();
 
   useEffect(() => {
     (async () => {
       const response = await axios.get(
-        Urls.SPOTIFY_API_URI + "playlists/" + id + "/tracks",
+        Urls.SPOTIFY_API_URI + "playlists/" + spotifyItemId + "/tracks",
         {
           headers: {
             Authorization:
@@ -26,5 +24,5 @@ export default function SpotifyPlaylistDetails() {
     })();
   }, []);
 
-  return <div>Spotify Playlist Details {id}</div>;
+  return <div>Spotify Playlist Details {spotifyItemId}</div>;
 }

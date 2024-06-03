@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSnackbar } from "../contexts/SnackbarContext";
-
 import axios from "axios";
 import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
 import LibraryListItem from "./components/LibraryListItem";
 import LocalStorageProvider from "../common/LocalStorageProvider";
 import Pager from "../common/Pager";
+import { LibraryItemType } from "./models/LibraryItemType";
 
 export default function SpotifyPlaylists() {
   const { openSnackbar } = useSnackbar();
@@ -63,7 +63,7 @@ export default function SpotifyPlaylists() {
       {model.data.map((item) => (
         <LibraryListItem
           key={item.id}
-          pageLink="playlist"
+          libraryItemType={LibraryItemType.PLAYLIST}
           libraryItem={item}
           showDelete={false}
         />

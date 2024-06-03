@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSnackbar } from "../contexts/SnackbarContext";
-
+import { LibraryItemType } from "./models/LibraryItemType";
 import axios from "axios";
 import Urls from "../enums/Urls";
 import Constants from "../enums/Constants";
@@ -94,7 +94,7 @@ export default function SpotifyAlbums() {
       {model.data.map((item) => (
         <LibraryListItem
           key={item.id}
-          pageLink="album"
+          libraryItemType={LibraryItemType.ALBUM}
           libraryItem={item}
           showDelete={true}
           handleDelete={handleDelete}
