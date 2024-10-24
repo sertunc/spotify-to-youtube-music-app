@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -11,6 +12,7 @@ import SpotifyMe from "./models/SpotifyMe";
 import SpotifyUserInfo from "./SpotifyUserInfo";
 
 export default function SpotifyUserInfoContainer() {
+  const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
 
   const [spotifyMe, setSpotifyMe] = useState<SpotifyMe>(new SpotifyMe());
@@ -37,6 +39,8 @@ export default function SpotifyUserInfoContainer() {
           setSpotifyToken(result.access_token);
 
           getSpotifyMe(result.access_token);
+
+          navigate("/");
         }
       } else if (spotifyToken) {
         getSpotifyMe(spotifyToken);

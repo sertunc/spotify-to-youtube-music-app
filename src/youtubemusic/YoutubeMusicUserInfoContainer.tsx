@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import { Button } from "@mui/material";
@@ -14,6 +14,29 @@ export default function YoutubeMusicUserInfoContainer() {
 
   const [youtubeMusicMe, setYoutubeMusicMe] = useState<YoutubeMusicMe>(new YoutubeMusicMe());
 
+  useEffect(() => {
+    (async () => {
+      const spotifyCode = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY) || "";
+
+      if (spotifyCode !== "") {
+        await getYoutubeMusicMe(spotifyCode);
+      }
+    })();
+  }, []);
+
+  const getYoutubeMusicMe = async (spotifyCode: string) => {
+    const ytMusicLoginResult = await axios.post(Urls.YOUTUBE_MUSIC_API_URI + "login", {
+      userId: spotifyCode.slice(-10),
+    });
+
+    if (ytMusicLoginResult.data.isSuccessful) {
+      setYoutubeMusicMe(ytMusicLoginResult.data.data);
+      openSnackbar("Login successfully to youtube music", "success");
+    } else {
+      openSnackbar(ytMusicLoginResult.data.data.errors, "error");
+    }
+  };
+
   const handleYoutubeMusicLogin = async () => {
     const spotifyCode = LocalStorageProvider.get(Constants.SPOTIFY_CODE_VERIFIER_KEY) || "";
 
@@ -22,15 +45,7 @@ export default function YoutubeMusicUserInfoContainer() {
       return;
     }
 
-    const ytMusicLoginResult = await axios.post(Urls.YOUTUBE_MUSIC_API_URI + "login", {
-      userId: spotifyCode,
-    });
-
-    if (ytMusicLoginResult.data.isSuccessful) {
-      setYoutubeMusicMe(ytMusicLoginResult.data.data);
-    } else {
-      openSnackbar(ytMusicLoginResult.data.data.errors, "error");
-    }
+    await getYoutubeMusicMe(spotifyCode);
   };
 
   const handleYoutubeMusicLogout = () => {
