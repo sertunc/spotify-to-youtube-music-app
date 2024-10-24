@@ -1,8 +1,9 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Typography } from "@mui/material";
 import YoutubeMusicMe from "./models/YoutubeMusicMe";
 
 interface IProps {
   youtubeMusicMe: YoutubeMusicMe;
+  handleYoutubeMusicLogout: () => void;
 }
 
 export default function YoutubeMusicUserInfo(props: IProps) {
@@ -13,14 +14,15 @@ export default function YoutubeMusicUserInfo(props: IProps) {
           <Typography component="div" variant="h5">
             {props.youtubeMusicMe.title}
           </Typography>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
+          <Typography variant="subtitle1" color="text.secondary" component="div">
             {props.youtubeMusicMe.description}
           </Typography>
         </CardContent>
+        <CardActions>
+          <Button size="small" onClick={props.handleYoutubeMusicLogout}>
+            Logout
+          </Button>
+        </CardActions>
       </Box>
     </Card>
   );

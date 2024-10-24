@@ -1,65 +1,31 @@
-import { useEffect, useState } from "react";
-import { useSnackbar } from "../contexts/SnackbarContext";
-import axios from "axios";
-import Urls from "../enums/Urls";
-import Constants from "../enums/Constants";
 import SpotifyMe from "./models/SpotifyMe";
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import LocalStorageProvider from "../common/LocalStorageProvider";
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 
-export default function SpotifyUserInfo() {
-  const { openSnackbar } = useSnackbar();
+interface IProps {
+  spotifyMe: SpotifyMe;
+  handleSpotifyLogout: () => void;
+}
 
-  const [spotifyMe, setSpotifyMe] = useState<SpotifyMe>(new SpotifyMe());
-
-  useEffect(() => {
-    (async () => {
-      const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
-      if (token) {
-        try {
-          const response = await axios.get(Urls.SPOTIFY_API_URI + "me", {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          });
-
-          setSpotifyMe(response.data);
-        } catch (error) {
-          if (error.response.status === 401) {
-            LocalStorageProvider.clear();
-            openSnackbar("Please login with spotify", "error");
-          }
-        }
-      } else {
-        openSnackbar("Please login with spotify", "error");
-      }
-    })();
-  }, []);
-
+export default function SpotifyUserInfo(props: IProps) {
   return (
-    spotifyMe && (
-      <Card sx={{ display: "flex" }}>
-        {/* <CardMedia
-          component="img"
-          sx={{ width: 151 }}
-          image={spotifyMe.images[1].url}
-        /> */}
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <Typography component="div" variant="h5">
-              {spotifyMe.display_name}
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              color="text.secondary"
-              component="div"
-            >
-              {`${spotifyMe.followers.total} followers`}
-              {` - ${spotifyMe.product}`}
-            </Typography>
-          </CardContent>
-        </Box>
-      </Card>
-    )
+    <Card sx={{ display: "flex" }}>
+      {/* <CardMedia component="img" sx={{ width: 151 }} image={spotifyMe?.images[1]?.url} /> */}
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <CardContent sx={{ flex: "1 0 auto" }}>
+          <Typography component="div" variant="h5">
+            {props.spotifyMe.display_name}
+          </Typography>
+          <Typography variant="subtitle1" component="div" sx={{ color: "text.secondary" }}>
+            {`${props.spotifyMe.followers.total} followers`}
+            {` - ${props.spotifyMe.product}`}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small" onClick={props.handleSpotifyLogout}>
+            Logout
+          </Button>
+        </CardActions>
+      </Box>
+    </Card>
   );
 }

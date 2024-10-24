@@ -1,8 +1,8 @@
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import NavBar from "./NavBar";
-import SpotifyContainer from "../spotfiy/SpotifyContainer";
-import YoutubeMusicContainer from "../youtubemusic/YoutubeMusicContainer";
+import SpotifyUserInfoContainer from "../spotfiy/SpotifyUserInfoContainer";
+import YoutubeMusicUserInfoContainer from "../youtubemusic/YoutubeMusicUserInfoContainer";
 
 export default function Layout(props: any) {
   return (
@@ -12,10 +12,13 @@ export default function Layout(props: any) {
           <NavBar />
         </Grid>
         <Grid item xs={6}>
-          <SpotifyContainer />
+          <SpotifyUserInfoContainer />
         </Grid>
         <Grid item xs={6}>
-          <YoutubeMusicContainer />
+          <YoutubeMusicUserInfoContainer />
+        </Grid>
+        <Grid item xs={12}>
+          content
         </Grid>
       </Grid>
     </Container>
