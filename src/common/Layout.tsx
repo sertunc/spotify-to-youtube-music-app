@@ -17,8 +17,11 @@ export default function Layout(props: any) {
         <Grid item xs={6}>
           <YoutubeMusicUserInfoContainer />
         </Grid>
-        <Grid item xs={12}>
-          content
+        <Grid item xs={6}>
+          spotify content
+        </Grid>
+        <Grid item xs={6}>
+          youtube music content
         </Grid>
       </Grid>
     </Container>
