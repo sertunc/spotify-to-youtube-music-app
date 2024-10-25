@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
+import { useAppContext } from "../contexts/AppContext";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import { LibraryItemType } from "./models/LibraryItemType";
 import axios from "axios";
 import Urls from "../enums/Urls";
-import Constants from "../enums/Constants";
 import LibraryListItem from "./components/LibraryListItem";
-import LocalStorageProvider from "../common/LocalStorageProvider";
 import CustomYesNoDialog from "../common/CustomYesNoDialog";
 import Pager from "../common/Pager";
 
 export default function SpotifyAlbums() {
   const { openSnackbar } = useSnackbar();
+  const { spotifyToken } = useAppContext();
 
   const [showModal, setShowModal] = useState({
     open: false,
@@ -26,13 +26,12 @@ export default function SpotifyAlbums() {
 
   useEffect(() => {
     (async () => {
-      const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
-      if (token) {
+      if (spotifyToken) {
         const response = await axios.get(
           `${Urls.SPOTIFY_API_URI}me/albums?limit=${model.limit}&offset=${model.offset}`,
           {
             headers: {
-              Authorization: "Bearer " + token,
+              Authorization: `Bearer ${spotifyToken}`,
             },
           }
         );
@@ -65,11 +64,10 @@ export default function SpotifyAlbums() {
   };
 
   const handleDeleteConfirm = async () => {
-    const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
-    if (token) {
+    if (spotifyToken) {
       await axios.delete(`${Urls.SPOTIFY_API_URI}me/albums`, {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: `Bearer ${spotifyToken}`,
         },
         data: {
           ids: [showModal.id],

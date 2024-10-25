@@ -1,25 +1,23 @@
 import { useState, useEffect } from "react";
+import { useAppContext } from "../contexts/AppContext";
 import axios from "axios";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import { Button } from "@mui/material";
 import Urls from "../enums/Urls";
-import Constants from "../enums/Constants";
 import Item from "../common/Item";
-import LocalStorageProvider from "../common/LocalStorageProvider";
 import YoutubeMusicMe from "./models/YoutubeMusicMe";
 import YoutubeMusicUserInfo from "./YoutubeMusicUserInfo";
 
 export default function YoutubeMusicUserInfoContainer() {
   const { openSnackbar } = useSnackbar();
+  const { spotifyToken, setSpotifyToken } = useAppContext();
 
   const [youtubeMusicMe, setYoutubeMusicMe] = useState<YoutubeMusicMe>(new YoutubeMusicMe());
 
   useEffect(() => {
     (async () => {
-      const spotifyCode = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY) || "";
-
-      if (spotifyCode !== "") {
-        await getYoutubeMusicMe(spotifyCode);
+      if (spotifyToken !== "") {
+        await getYoutubeMusicMe(spotifyToken);
       }
     })();
   }, []);
@@ -38,18 +36,16 @@ export default function YoutubeMusicUserInfoContainer() {
   };
 
   const handleYoutubeMusicLogin = async () => {
-    const spotifyCode = LocalStorageProvider.get(Constants.SPOTIFY_CODE_VERIFIER_KEY) || "";
-
-    if (spotifyCode === "") {
+    if (spotifyToken === "") {
       openSnackbar("Please first of all login with spotify", "error");
       return;
     }
 
-    await getYoutubeMusicMe(spotifyCode);
+    await getYoutubeMusicMe(spotifyToken);
   };
 
   const handleYoutubeMusicLogout = () => {
-    LocalStorageProvider.clear();
+    setSpotifyToken("");
 
     window.location.reload();
   };

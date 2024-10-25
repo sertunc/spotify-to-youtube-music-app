@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
+import { useAppContext } from "../contexts/AppContext";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import axios from "axios";
 import Urls from "../enums/Urls";
-import Constants from "../enums/Constants";
 import LibraryListItem from "./components/LibraryListItem";
-import LocalStorageProvider from "../common/LocalStorageProvider";
 import Pager from "../common/Pager";
 import { LibraryItemType } from "./models/LibraryItemType";
 
 export default function SpotifyPlaylists() {
   const { openSnackbar } = useSnackbar();
+  const { spotifyToken } = useAppContext();
 
   const [model, setModel] = useState<LibraryCollection>({
     data: [],
@@ -20,13 +20,12 @@ export default function SpotifyPlaylists() {
 
   useEffect(() => {
     (async () => {
-      const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
-      if (token) {
+      if (spotifyToken) {
         const response = await axios.get(
           `${Urls.SPOTIFY_API_URI}me/playlists?limit=${model.limit}&offset=${model.offset}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${spotifyToken}`,
             },
           }
         );

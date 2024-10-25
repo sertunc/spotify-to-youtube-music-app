@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import axios from "axios";
@@ -14,11 +15,9 @@ import SpotifyUserInfo from "./SpotifyUserInfo";
 export default function SpotifyUserInfoContainer() {
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
+  const { spotifyToken, setSpotifyToken } = useAppContext();
 
   const [spotifyMe, setSpotifyMe] = useState<SpotifyMe>(new SpotifyMe());
-  const [spotifyToken, setSpotifyToken] = useState<string>(() => {
-    return LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY) || "";
-  });
 
   useEffect(() => {
     (async () => {
@@ -35,9 +34,7 @@ export default function SpotifyUserInfoContainer() {
         const result = await getToken(tokenEndpoint, code, codeVerifier, clientId, redirectUri);
 
         if (result.access_token) {
-          LocalStorageProvider.set(Constants.SPOTIFY_TOKEN_KEY, result.access_token ?? "");
           setSpotifyToken(result.access_token);
-
           getSpotifyMe(result.access_token);
 
           navigate("/");
@@ -89,7 +86,7 @@ export default function SpotifyUserInfoContainer() {
   };
 
   const handleSpotifyLogout = () => {
-    LocalStorageProvider.clear();
+    setSpotifyToken("");
 
     window.location.reload();
   };

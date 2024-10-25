@@ -5,8 +5,10 @@ interface AppContextType {
   libraryItemType: LibraryItemType;
   spotifyItemId: string;
   spotifyItemName: string;
+  spotifyToken: string;
   ytMusicItemId: string;
   clearLibraryItemType: () => void;
+  setSpotifyToken: (spotifyToken: string) => void;
   setSpotifyItemId: (
     spotifyItemId: string,
     spotifyItemName: string,
@@ -19,6 +21,7 @@ interface AppContextStateType {
   libraryItemType: LibraryItemType;
   spotifyItemId: string;
   spotifyItemName: string;
+  spotifyToken: string;
   ytMusicItemId: string;
 }
 
@@ -29,14 +32,12 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     libraryItemType: LibraryItemType.NONE,
     spotifyItemId: "",
     spotifyItemName: "",
+    spotifyToken: "",
     ytMusicItemId: "",
   });
 
-  const setYtMusicItemId = (ytMusicItemId: string) => {
-    setAppContextState({
-      ...appContextState,
-      ytMusicItemId,
-    });
+  const setSpotifyToken = (spotifyToken: string) => {
+    setAppContextState({ ...appContextState, spotifyToken });
   };
 
   const setSpotifyItemId = (
@@ -52,20 +53,23 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     });
   };
 
+  const setYtMusicItemId = (ytMusicItemId: string) => {
+    setAppContextState({ ...appContextState, ytMusicItemId });
+  };
+
   const clearLibraryItemType = () => {
-    setAppContextState({
-      ...appContextState,
-      libraryItemType: LibraryItemType.NONE,
-    });
+    setAppContextState({ ...appContextState, libraryItemType: LibraryItemType.NONE });
   };
 
   const value: AppContextType = {
     libraryItemType: appContextState.libraryItemType,
     spotifyItemId: appContextState.spotifyItemId,
     spotifyItemName: appContextState.spotifyItemName,
+    spotifyToken: appContextState.spotifyToken,
     ytMusicItemId: appContextState.ytMusicItemId,
     clearLibraryItemType,
     setSpotifyItemId,
+    setSpotifyToken,
     setYtMusicItemId,
   };
 

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
+import { useAppContext } from "../contexts/AppContext";
 import { useSnackbar } from "../contexts/SnackbarContext";
 import { LibraryItemType } from "./models/LibraryItemType";
 import axios from "axios";
 import Urls from "../enums/Urls";
-import Constants from "../enums/Constants";
 import TrackListItem from "./components/TrackListItem";
-import LocalStorageProvider from "../common/LocalStorageProvider";
 import CustomYesNoDialog from "../common/CustomYesNoDialog";
 import Pager from "../common/Pager";
 
 export default function SpotifyTracks() {
   const { openSnackbar } = useSnackbar();
+  const { spotifyToken } = useAppContext();
 
   const [showModal, setShowModal] = useState({
     open: false,
@@ -26,13 +26,12 @@ export default function SpotifyTracks() {
 
   useEffect(() => {
     (async () => {
-      const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
-      if (token) {
+      if (spotifyToken) {
         const response = await axios.get(
           `${Urls.SPOTIFY_API_URI}me/tracks?limit=${model.limit}&offset=${model.offset}`,
           {
             headers: {
-              Authorization: "Bearer " + token,
+              Authorization: `Bearer ${spotifyToken}`,
             },
           }
         );
@@ -66,11 +65,10 @@ export default function SpotifyTracks() {
   };
 
   const handleDeleteConfirm = async () => {
-    const token = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY);
-    if (token) {
+    if (spotifyToken) {
       await axios.delete(`${Urls.SPOTIFY_API_URI}me/tracks`, {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: `Bearer ${spotifyToken}`,
         },
         data: {
           ids: [showModal.id],
@@ -93,12 +91,7 @@ export default function SpotifyTracks() {
   return (
     <>
       {model.data.map((item) => (
-        <TrackListItem
-          key={item.id}
-          libraryItemType={LibraryItemType.TRACK}
-          trackItem={item}
-          handleDelete={handleDelete}
-        />
+        <TrackListItem key={item.id} trackItem={item} handleDelete={handleDelete} />
       ))}
       <Pager
         total={model.total}

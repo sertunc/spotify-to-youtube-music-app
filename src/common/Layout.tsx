@@ -1,14 +1,13 @@
+import { useAppContext } from "../contexts/AppContext";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import NavBar from "./NavBar";
 import SpotifyUserInfoContainer from "../spotfiy/SpotifyUserInfoContainer";
 import YoutubeMusicUserInfoContainer from "../youtubemusic/YoutubeMusicUserInfoContainer";
 import SpotifyContainer from "../spotfiy/SpotifyContainer";
-import LocalStorageProvider from "./LocalStorageProvider";
-import Constants from "../enums/Constants";
 
 export default function Layout() {
-  const spotifyToken = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY) || "";
+  const { spotifyToken } = useAppContext();
 
   return (
     <Container fixed>
