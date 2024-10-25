@@ -9,11 +9,11 @@ import SpotifyPlaylistDetails from "./SpotifyPlaylistDetails";
 import SpotifyAlbumDetails from "./SpotifyAlbumDetails";
 
 export default function SpotifyContainer() {
-  const { spotifyItemId, libraryItemType, clearLibraryItemType } = useAppContext();
+  const { libraryItemType, clearLibraryItemType } = useAppContext();
 
   const [currentItem, setCurrentItem] = useState<LibraryItemType>(LibraryItemType.NONE);
 
-  const handleItemClick = (itemType: LibraryItemType, link: string) => {
+  const handleItemClick = (itemType: LibraryItemType) => {
     clearLibraryItemType();
     setCurrentItem(itemType);
   };
@@ -21,25 +21,22 @@ export default function SpotifyContainer() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        {/* <SpotifyUserInfo /> */}
-      </Grid>
-      <Grid item xs={12}>
         <ButtonGroup variant="outlined">
           <Button
             variant={currentItem === LibraryItemType.PLAYLIST ? "contained" : "outlined"}
-            onClick={() => handleItemClick(LibraryItemType.PLAYLIST, "playlists")}
+            onClick={() => handleItemClick(LibraryItemType.PLAYLIST)}
           >
             Playlists
           </Button>
           <Button
             variant={currentItem === LibraryItemType.TRACK ? "contained" : "outlined"}
-            onClick={() => handleItemClick(LibraryItemType.TRACK, "tracks")}
+            onClick={() => handleItemClick(LibraryItemType.TRACK)}
           >
             Saved Tracks
           </Button>
           <Button
             variant={currentItem === LibraryItemType.ALBUM ? "contained" : "outlined"}
-            onClick={() => handleItemClick(LibraryItemType.ALBUM, "albums")}
+            onClick={() => handleItemClick(LibraryItemType.ALBUM)}
           >
             Saved Albums
           </Button>

@@ -26,7 +26,7 @@ export default function SpotifyPlaylists() {
           `${Urls.SPOTIFY_API_URI}me/playlists?limit=${model.limit}&offset=${model.offset}`,
           {
             headers: {
-              Authorization: "Bearer " + token,
+              Authorization: `Bearer ${token}`,
             },
           }
         );

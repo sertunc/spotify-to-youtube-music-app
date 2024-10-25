@@ -4,10 +4,12 @@ import { LibraryItemType } from "../spotfiy/models/LibraryItemType";
 interface AppContextType {
   libraryItemType: LibraryItemType;
   spotifyItemId: string;
+  spotifyItemName: string;
   ytMusicItemId: string;
   clearLibraryItemType: () => void;
   setSpotifyItemId: (
     spotifyItemId: string,
+    spotifyItemName: string,
     libraryItemType: LibraryItemType
   ) => void;
   setYtMusicItemId: (ytMusicItemId: string) => void;
@@ -16,19 +18,17 @@ interface AppContextType {
 interface AppContextStateType {
   libraryItemType: LibraryItemType;
   spotifyItemId: string;
+  spotifyItemName: string;
   ytMusicItemId: string;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
 
-export const AppContextProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [appContextState, setAppContextState] = useState<AppContextStateType>({
     libraryItemType: LibraryItemType.NONE,
     spotifyItemId: "",
+    spotifyItemName: "",
     ytMusicItemId: "",
   });
 
@@ -41,12 +41,14 @@ export const AppContextProvider = ({
 
   const setSpotifyItemId = (
     spotifyItemId: string,
+    spotifyItemName: string,
     libraryItemType: LibraryItemType
   ) => {
     setAppContextState({
       ...appContextState,
       libraryItemType,
       spotifyItemId,
+      spotifyItemName,
     });
   };
 
@@ -60,6 +62,7 @@ export const AppContextProvider = ({
   const value: AppContextType = {
     libraryItemType: appContextState.libraryItemType,
     spotifyItemId: appContextState.spotifyItemId,
+    spotifyItemName: appContextState.spotifyItemName,
     ytMusicItemId: appContextState.ytMusicItemId,
     clearLibraryItemType,
     setSpotifyItemId,

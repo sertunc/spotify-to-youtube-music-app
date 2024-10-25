@@ -31,7 +31,7 @@ export default function LibraryListItem(props: IProps) {
     >
       <ButtonBase
         onClick={() => {
-          setSpotifyItemId(props.libraryItem.id, props.libraryItemType);
+          setSpotifyItemId(props.libraryItem.id, props.libraryItem.name, props.libraryItemType);
         }}
       >
         <CardMedia
@@ -43,11 +43,7 @@ export default function LibraryListItem(props: IProps) {
         <Typography component="div" variant="h6">
           {props.libraryItem.name} ({props.libraryItem.trackTotal})
         </Typography>
-        <Link
-          target="_blank"
-          style={CommonStyles.link}
-          href={props.libraryItem.url}
-        >
+        <Link target="_blank" style={CommonStyles.link} href={props.libraryItem.url}>
           Open in Spotify
         </Link>
       </CardContent>
@@ -55,9 +51,7 @@ export default function LibraryListItem(props: IProps) {
         <CardActions style={{ marginLeft: "auto" }}>
           {props.handleDelete && (
             <IconButton
-              onClick={() =>
-                props.handleDelete && props.handleDelete(props.libraryItem.id)
-              }
+              onClick={() => props.handleDelete && props.handleDelete(props.libraryItem.id)}
             >
               <DeleteIcon />
             </IconButton>

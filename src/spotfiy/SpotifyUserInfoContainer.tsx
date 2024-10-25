@@ -50,7 +50,7 @@ export default function SpotifyUserInfoContainer() {
 
   const getSpotifyMe = async (token: string) => {
     try {
-      const response = await axios.get(Urls.SPOTIFY_API_URI + "me", {
+      const response = await axios.get(`${Urls.SPOTIFY_API_URI}me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -61,7 +61,8 @@ export default function SpotifyUserInfoContainer() {
       openSnackbar("Login successfully to spotify", "success");
     } catch (error: any) {
       if (error.response.status === 401) {
-        LocalStorageProvider.clear();
+        handleSpotifyLogout();
+
         openSnackbar("Please login with spotify", "error");
       }
     }

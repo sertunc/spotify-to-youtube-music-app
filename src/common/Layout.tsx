@@ -3,8 +3,13 @@ import Grid from "@mui/material/Grid";
 import NavBar from "./NavBar";
 import SpotifyUserInfoContainer from "../spotfiy/SpotifyUserInfoContainer";
 import YoutubeMusicUserInfoContainer from "../youtubemusic/YoutubeMusicUserInfoContainer";
+import SpotifyContainer from "../spotfiy/SpotifyContainer";
+import LocalStorageProvider from "./LocalStorageProvider";
+import Constants from "../enums/Constants";
 
-export default function Layout(props: any) {
+export default function Layout() {
+  const spotifyToken = LocalStorageProvider.get(Constants.SPOTIFY_TOKEN_KEY) || "";
+
   return (
     <Container fixed>
       <Grid container spacing={2}>
@@ -18,10 +23,10 @@ export default function Layout(props: any) {
           <YoutubeMusicUserInfoContainer />
         </Grid>
         <Grid item xs={6}>
-          spotify content
+          {spotifyToken !== "" ? <SpotifyContainer /> : null}
         </Grid>
         <Grid item xs={6}>
-          youtube music content
+          {spotifyToken !== "" ? "youtube music content" : null}
         </Grid>
       </Grid>
     </Container>
