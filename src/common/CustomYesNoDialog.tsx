@@ -23,15 +23,10 @@ export default function CustomYesNoDialog(props: IProps) {
         <DialogContentText>{props.contentMessage}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={props.onClose}
-          variant="contained"
-          color="primary"
-          autoFocus
-        >
+        <Button onClick={props.onClose} variant="contained" color="primary" autoFocus>
           NO
         </Button>
-        <Button onClick={props.onYesClick} variant="contained" color="primary">
+        <Button onClick={props.onYesClick} variant="outlined" color="primary">
           YES
         </Button>
       </DialogActions>
